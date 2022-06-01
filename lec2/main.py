@@ -1,7 +1,6 @@
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
 from math import sin, cos
 plt.style.use('dark_background')
 
@@ -24,7 +23,7 @@ with open('file.csv') as f:
 fig, ax = plt.subplots()
 ax.plot(x1, y1, label='Offshore minerals')
 ax.plot(x2, y2, label='Shipping')
-ax.set_title('Value')
+ax.set_title('GDP')
 ax.set_xlabel('Year')
 ax.set_ylabel('Value') 
 
