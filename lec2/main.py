@@ -1,7 +1,10 @@
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 from math import sin, cos
+plt.style.use('dark_background')
+
 x1 = []
 y1 = []
 
