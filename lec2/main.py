@@ -74,15 +74,13 @@ fig = plt.figure()
 p1 = fig.add_subplot(121)
 p2 = fig.add_subplot(122)
 
-'''p1.title('GDP')
-p1.xlabel('Year')
-p1.ylabel('Value') 
-p1.legend()
+p1.set_title('GDP')
+p1.set_xlabel('Year')
+p1.set_ylabel('Value') 
 
-p2.title('Sin')
-p2.xlabel('X')
-p2.ylabel('Y') 
-p2.legend()'''
+p2.set_title('Sin')
+p2.set_xlabel('X')
+p2.set_ylabel('Y') 
 
 p2.set_xlim([0, 4])
 p2.set_ylim([-1.5, 1.5])
@@ -92,10 +90,11 @@ l1, = p2.plot([],[],'b')
 
 l2, = p1.plot(x1, y1, label='Offshore minerals')
 l3, = p1.plot(x2, y2, label='Shipping')
-
+p1.legend()
 
 def init():
     l1.set_data([], [])
+    l1.set_label('Sin')
     return l1,
 def animate(i):
     x = np.linspace(0, 4, 1000)
