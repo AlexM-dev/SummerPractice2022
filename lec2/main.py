@@ -33,8 +33,8 @@ pylab.ylabel('Value')
 pylab.legend()
 
 pylab.subplot (1, 2, 2)
-x = np.linspace(2007, 2020, 1000000)
-y = 1e4 * abs(0.25 * x + 75 * (np.cos(x * 100)) * np.sin(2 * x)) - 3.3e6
+x = np.linspace(0, 100, 1000000)
+y = abs(0.25 * x + (np.cos(x * 100)) * np.sin(0.25 * x))
 pylab.plot(x, y, linewidth=2.0, label='numPy func')
 pylab.title('Func')
 pylab.xlabel('X')
