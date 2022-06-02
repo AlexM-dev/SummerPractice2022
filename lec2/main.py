@@ -1,7 +1,11 @@
 import csv
+from matplotlib.axes import Axes
 import numpy as np
 import matplotlib.pyplot as plt
 from math import sin, cos
+from matplotlib.animation import FuncAnimation
+import pylab
+
 plt.style.use('dark_background')
 
 x1 = []
@@ -19,19 +23,21 @@ with open('file.csv') as f:
             y2.append(int(row['data_value']))
             x2.append(int(row['year']))
             
-        
-fig, ax = plt.subplots()
-ax.plot(x1, y1, label='Offshore minerals')
-ax.plot(x2, y2, label='Shipping')
-ax.set_title('GDP')
-ax.set_xlabel('Year')
-ax.set_ylabel('Value') 
 
+pylab.subplot (1, 2, 1)
+pylab.plot(x1, y1, label='Offshore minerals')
+pylab.plot(x2, y2, label='Shipping')
+pylab.title('GDP')
+pylab.xlabel('Year')
+pylab.ylabel('Value') 
+pylab.legend()
+
+pylab.subplot (1, 2, 2)
 x = np.linspace(2007, 2020, 1000000)
-#y =  1e6 + 1e6 * np.sin(x * x)
-
 y = 1e4 * abs(0.25 * x + 75 * (np.cos(x * 100)) * np.sin(2 * x)) - 3.3e6
-ax.plot(x, y, linewidth=2.0, label='numPy func')
-ax.legend()
-
+pylab.plot(x, y, linewidth=2.0, label='numPy func')
+pylab.title('Func')
+pylab.xlabel('X')
+pylab.ylabel('Y') 
+pylab.legend()
 plt.show()
