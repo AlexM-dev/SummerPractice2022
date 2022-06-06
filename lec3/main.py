@@ -2,10 +2,15 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import matplotlib.animation
 
+### Init
+plt.style.use('dark_background')
+
 elist = []
 graph = []
 ort = False
+###
 
+### Make lists fincs
 def makeAdjList(edges, amount_of_vertices):
     graph = [[] for _ in range(amount_of_vertices)]
     if ort:
@@ -39,9 +44,13 @@ def makeIncList(edges, amount_of_vertices):
                     graph[edges[i][1] - 1].append([(edges[i][1], edges[i][0]), edges[i][2]])
 
     return graph
+###
 
-
-with open('simple.stp') as f:
+#'''
+### Read stp and make useful data
+#use b13.stp or es30fst.stp to check non-orts
+#use simple.stp or custom.stp to check orts
+with open('b13.stp') as f:
     s = f.readlines()
     s = [line.rstrip() for line in s]
 
@@ -55,7 +64,6 @@ while s[end].lower() != 'End'.lower():
 
 for i in range(start + 1, end):
     graph.append(s[i].split(' '))
-    #graph[i - start + 1] = s[i].split(' ')
 
 nodes = int(graph[0][1])
 
@@ -67,12 +75,13 @@ else:
     edges = int(graph[1][1])
 
 for i in range(2, len(graph)):
-    #print(graph[i][3])
-    #elist.append([1, 2, 3])
     elist.append([int(graph[i][1]), int(graph[i][2]), int(graph[i][3])])
+###
+#'''
 
-
-'''if ort:
+#'''
+### Draw
+if ort:
     G = nx.DiGraph(directed=True)
     G.add_weighted_edges_from(elist)
 
@@ -85,10 +94,42 @@ for i in range(2, len(graph)):
     def update(idx):
         ax.clear()
         nx.draw_networkx_nodes(G, pos, ax=ax, node_color="b")
-        #nx.draw_networkx_nodes(G, pos, ax=ax, node_color="r", nodelist=['3'])
+        nx.draw_networkx_nodes(G, pos, ax=ax, node_color="r", nodelist=[idx % 11 + 1])
 
         nx.draw_networkx_edges(
-            G, pos, edgelist=[elist[idx]], width=2, alpha=0.5, edge_color="r", style="dashed", ax=ax
+            G, pos, edgelist=[elist[idx]], width=5, alpha=0.5, edge_color="r", style="dashed", ax=ax
+        )
+
+        nx.draw_networkx_edges(
+            G, pos, edgelist=elist[:idx] + elist[idx + 1:], width=2, edge_color="b", ax=ax
+        )
+
+        nx.draw_networkx_labels(G, pos, font_size=10, font_family="sans-serif", ax=ax)
+
+        edge_labels = nx.get_edge_attributes(G, "weight")
+        nx.draw_networkx_edge_labels(G, pos, edge_labels, ax=ax)
+
+        ax.set_title(f'Frame {idx}')
+
+    ani = matplotlib.animation.FuncAnimation(fig, update, frames=len(elist) - 1, interval=500, repeat=True)
+    plt.show()
+else:
+    G = nx.Graph()
+    G.add_weighted_edges_from(elist)
+
+    labels = nx.get_edge_attributes(G, 'weight')
+
+    pos = nx.spring_layout(G, seed=30)
+
+    fig, ax = plt.subplots(figsize=(len(elist), 4))
+
+    def update(idx):
+        ax.clear()
+        nx.draw_networkx_nodes(G, pos, ax=ax, node_color="b")
+        nx.draw_networkx_nodes(G, pos, ax=ax, node_color="r", nodelist=[idx % 11 + 1])
+
+        nx.draw_networkx_edges(
+            G, pos, edgelist=[elist[idx]], width=5, alpha=0.5, edge_color="r", style="dashed", ax=ax
         )
 
         nx.draw_networkx_edges(
@@ -102,40 +143,13 @@ for i in range(2, len(graph)):
 
         ax.set_title(f'Frame {idx}')
 
-    ani = matplotlib.animation.FuncAnimation(fig, update, frames=len(elist), interval=1000, repeat=True)
+    ani = matplotlib.animation.FuncAnimation(fig, update, frames=len(elist) - 1, interval=500, repeat=True)
     plt.show()
-else:
-    G = nx.Graph()
-    G.add_weighted_edges_from(elist)
+###
+#'''
 
-    labels = nx.get_edge_attributes(G, 'weight')
-
-    pos = nx.spring_layout(G, seed=7)
-
-    fig, ax = plt.subplots(figsize=(len(elist), 4))
-
-    def update(idx):
-        ax.clear()
-        nx.draw_networkx_nodes(G, pos, ax=ax)
-
-        nx.draw_networkx_edges(
-            G, pos, edgelist=[elist[idx]], width=6, alpha=0.5, edge_color="r", style="dashed", ax=ax
-        )
-
-        nx.draw_networkx_edges(
-            G, pos, edgelist=elist[:idx] + elist[idx + 1:], width=7, edge_color="b", ax=ax
-        )
-
-        nx.draw_networkx_labels(G, pos, font_size=20, font_family="sans-serif", ax=ax)
-
-        edge_labels = nx.get_edge_attributes(G, "weight")
-        nx.draw_networkx_edge_labels(G, pos, edge_labels, ax=ax)
-
-        ax.set_title(f'Frame {idx}')
-
-    ani = matplotlib.animation.FuncAnimation(fig, update, frames=len(elist), interval=1000, repeat=True)
-    plt.show()'''
-
+#'''
+### Make and print lists
 adjList = makeAdjList(elist, nodes)
 incList = makeIncList(elist, nodes)
 
@@ -146,3 +160,5 @@ print()
 
 for i in range(nodes):
     print(f'{i+1} -> {incList[i]}')
+###
+#'''
