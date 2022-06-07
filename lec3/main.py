@@ -54,6 +54,7 @@ def readStp(filename):
 
     graph = []
     elist = []
+    ort = False
     start = 0
     while s[start].lower() != 'Section Graph'.lower():
         start+=1
@@ -66,16 +67,24 @@ def readStp(filename):
         graph.append(s[i].split(' '))
 
     nodes = int(graph[0][1])
+    edges = int(graph[1][1])
 
-    if(graph[1][0].lower() == 'Arcs'.lower()):
-        ort = True
-        edges = int(graph[1][1])
-    else:
-        ort = False
-        edges = int(graph[1][1])
 
     for i in range(2, len(graph)):
-        elist.append([int(graph[i][1]), int(graph[i][2]), int(graph[i][3])])
+        if graph[i][0].lower() == 'A'.lower():
+            ort = True
+
+    for i in range(2, len(graph)):
+        if ort:
+            if(graph[i][0].lower() == 'A'):
+                elist.append([int(graph[i][1]), int(graph[i][2]), int(graph[i][3])])
+            else:
+                elist.append([int(graph[i][1]), int(graph[i][2]), int(graph[i][3])])
+                elist.append([int(graph[i][2]), int(graph[i][1]), int(graph[i][3])])
+        else:
+            elist.append([int(graph[i][1]), int(graph[i][2]), int(graph[i][3])])
+
+
 
     return elist, edges, ort, nodes
 ###
@@ -83,7 +92,6 @@ def readStp(filename):
 
 elist, edges, ort, nodes = readStp('simple.stp')
 
-#'''
 ### Draw
 if ort:
     G = nx.DiGraph(directed=True)
@@ -150,9 +158,7 @@ else:
     ani = matplotlib.animation.FuncAnimation(fig, update, frames=len(elist) - 1, interval=500, repeat=True)
     plt.show()
 ###
-#'''
 
-#'''
 ### Make and print lists
 adjList = makeAdjList(elist, nodes)
 incList = makeIncList(elist, nodes)
@@ -165,4 +171,3 @@ print()
 for i in range(nodes):
     print(f'{i+1} -> {incList[i]}')
 ###
-#'''
