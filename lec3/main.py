@@ -77,11 +77,11 @@ def readStp(filename):
     for i in range(2, len(graph)):
         elist.append([int(graph[i][1]), int(graph[i][2]), int(graph[i][3])])
 
-    return elist, edges, ort
+    return elist, edges, ort, nodes
 ###
 #'''
 
-elist, edges, ort = readStp('simple.stp')
+elist, edges, ort, nodes = readStp('simple.stp')
 
 #'''
 ### Draw
