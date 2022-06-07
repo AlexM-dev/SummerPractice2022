@@ -25,24 +25,6 @@ def makeAdjList(edges, amount_of_vertices):
                     graph[edges[i][1] - 1].append(edges[i][0])
 
     return graph
-
-def makeIncList(edges, amount_of_vertices):
-    graph = [[] for _ in range(amount_of_vertices)]
-    if ort:
-        for k in range(1, amount_of_vertices + 1):
-            graph.append([])
-            for i in range(len(edges)):
-                if edges[i][0] == k:
-                    graph[k - 1].append([(edges[i][0], edges[i][1]), edges[i][2]])
-    else:
-        for k in range(1, amount_of_vertices + 1):
-            graph.append([])
-            for i in range(len(edges)):
-                if edges[i][0] == k:
-                    graph[k - 1].append([(edges[i][0], edges[i][1]), edges[i][2]])
-                    graph[edges[i][1] - 1].append([(edges[i][1], edges[i][0]), edges[i][2]])
-
-    return graph
 ###
 
 ###
@@ -56,7 +38,6 @@ def dfs(graph, source):
             path.append(s)
 
         elif s in path:
-            #leaf node
             continue
         for neighbour in graph[s - 1]:
             stack.append(neighbour)
@@ -71,7 +52,6 @@ def bfs(graph, source):
             path.append(s)
 
         elif s in path:
-            #leaf node
             continue
         for neighbour in graph[s - 1]:
             queue.append(neighbour)
@@ -79,8 +59,6 @@ def bfs(graph, source):
 
 #'''
 ### Read stp and make useful data
-#use b13.stp or es30fst.stp to check non-orts
-#use simple.stp or custom.stp to check orts
 def readStp(filename):
     with open(filename) as f:
         s = f.readlines()
@@ -124,83 +102,35 @@ def readStp(filename):
 ###
 #'''
 
-# simple1.stp is a tree
-# simple.stp is not a tree
+### simple1.stp is a tree
+### simple.stp is not a tree
 elist, edges, ort, nodes = readStp('simple1.stp')
-#print(elist)
 
-#dfs(makeAdjList(elist, nodes), 1)
-bfs(makeAdjList(elist, nodes), 1)
+### choose bfs or dfs
+dfs(makeAdjList(elist, nodes), 1)
+#bfs(makeAdjList(elist, nodes), 1)
+###
 
 ### Draw
-if ort:
-    G = nx.DiGraph(directed=True)
-    G.add_weighted_edges_from(elist)
+G = nx.Graph()
+G.add_weighted_edges_from(elist)
 
-    labels = nx.get_edge_attributes(G, 'weight')
+pos = nx.spring_layout(G, seed=30)
 
-    pos = nx.spring_layout(G, seed=23)
+fig, ax = plt.subplots(figsize=(len(elist), 4))
 
-    fig, ax = plt.subplots(figsize=(len(elist), 4))
-
-    def update(idx):
-        ax.clear()
-        nx.draw_networkx_nodes(G, pos, ax=ax, node_color="b")
-        nx.draw_networkx_nodes(G, pos, ax=ax, node_color="r", nodelist=path)
-
-        nx.draw_networkx_edges(
-            G, pos, width=2, edge_color="b", ax=ax
-        )
-
-        nx.draw_networkx_labels(G, pos, font_size=10, font_family="sans-serif", ax=ax)
-
-        edge_labels = nx.get_edge_attributes(G, "weight")
-        nx.draw_networkx_edge_labels(G, pos, edge_labels, ax=ax, label_pos=0.3)
-
-        ax.set_title(f'Frame {idx}')
-
-    ani = matplotlib.animation.FuncAnimation(fig, update, frames=len(elist) - 1, interval=500, repeat=True)
-    plt.show()
-else:
-    G = nx.Graph()
-    G.add_weighted_edges_from(elist)
-
-    labels = nx.get_edge_attributes(G, 'weight')
-
-    pos = nx.spring_layout(G, seed=30)
-
-    fig, ax = plt.subplots(figsize=(len(elist), 4))
-
-    def update(idx):
-        ax.clear()
-        nx.draw_networkx_nodes(G, pos, ax=ax, node_color="b")
-        nx.draw_networkx_nodes(G, pos, ax=ax, node_color="r", nodelist=path[0:idx%len(path) + 1])
+def update(idx):
+    ax.clear()
+    nx.draw_networkx_nodes(G, pos, ax=ax, node_color="b")
+    nx.draw_networkx_nodes(G, pos, ax=ax, node_color="r", nodelist=path[0:idx%len(path) + 1])
 
 
-        nx.draw_networkx_edges(G, pos, width=2, edge_color="b", ax=ax)
+    nx.draw_networkx_edges(G, pos, width=2, edge_color="b", ax=ax)
 
-        nx.draw_networkx_labels(G, pos, font_size=10, font_family="sans-serif", ax=ax)
+    nx.draw_networkx_labels(G, pos, font_size=10, font_family="sans-serif", ax=ax)
 
-        #edge_labels = nx.get_edge_attributes(G, "weight")
-        #nx.draw_networkx_edge_labels(G, pos, edge_labels, ax=ax)
+    ax.set_title(f'Frame {idx}')
 
-        ax.set_title(f'Frame {idx}')
-
-    ani = matplotlib.animation.FuncAnimation(fig, update, frames=len(path), interval=500, repeat=True)
-    plt.show()
+ani = matplotlib.animation.FuncAnimation(fig, update, frames=len(path), interval=500, repeat=True)
+plt.show()
 ###
-
-'''
-### Make and print lists
-adjList = makeAdjList(elist, nodes)
-incList = makeIncList(elist, nodes)
-
-for i in range(nodes):
-    print(f'{i+1} -> {adjList[i]}')
-
-print()
-
-for i in range(nodes):
-    print(f'{i+1} -> {incList[i]}')
-###
-'''
