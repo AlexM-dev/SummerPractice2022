@@ -106,6 +106,21 @@ def readStp(filename):
 ### simple.stp is not a tree
 elist, edges, ort, nodes = readStp('simple1.stp')
 
+'''
+### Big tree
+elist = []
+nodes = 100
+k = 2
+ort = False
+for i in range(1, nodes // 2):
+    elist.append([i, k, 1])
+    k+=1
+    elist.append([i, k, 1])
+    k+=1
+print(elist)
+###
+'''
+
 ### choose bfs or dfs
 dfs(makeAdjList(elist, nodes), 1)
 #bfs(makeAdjList(elist, nodes), 1)
