@@ -5,9 +5,6 @@ import matplotlib.animation
 ### Init
 plt.style.use('dark_background')
 
-elist = []
-graph = []
-ort = False
 ###
 
 ### Make lists fincs
@@ -50,34 +47,41 @@ def makeIncList(edges, amount_of_vertices):
 ### Read stp and make useful data
 #use b13.stp or es30fst.stp to check non-orts
 #use simple.stp or custom.stp to check orts
-with open('b13.stp') as f:
-    s = f.readlines()
-    s = [line.rstrip() for line in s]
+def readStp(filename):
+    with open(filename) as f:
+        s = f.readlines()
+        s = [line.rstrip() for line in s]
 
-start = 0
-while s[start].lower() != 'Section Graph'.lower():
-    start+=1
-end = start + 1
-while s[end].lower() != 'End'.lower():
-    end+=1
+    graph = []
+    elist = []
+    start = 0
+    while s[start].lower() != 'Section Graph'.lower():
+        start+=1
+    end = start + 1
+    while s[end].lower() != 'End'.lower():
+        end+=1
 
 
-for i in range(start + 1, end):
-    graph.append(s[i].split(' '))
+    for i in range(start + 1, end):
+        graph.append(s[i].split(' '))
 
-nodes = int(graph[0][1])
+    nodes = int(graph[0][1])
 
-if(graph[1][0].lower() == 'Arcs'.lower()):
-    ort = True
-    edges = int(graph[1][1])
-else:
-    ort = False
-    edges = int(graph[1][1])
+    if(graph[1][0].lower() == 'Arcs'.lower()):
+        ort = True
+        edges = int(graph[1][1])
+    else:
+        ort = False
+        edges = int(graph[1][1])
 
-for i in range(2, len(graph)):
-    elist.append([int(graph[i][1]), int(graph[i][2]), int(graph[i][3])])
+    for i in range(2, len(graph)):
+        elist.append([int(graph[i][1]), int(graph[i][2]), int(graph[i][3])])
+
+    return elist, edges, ort
 ###
 #'''
+
+elist, edges, ort = readStp('simple.stp')
 
 #'''
 ### Draw
@@ -107,7 +111,7 @@ if ort:
         nx.draw_networkx_labels(G, pos, font_size=10, font_family="sans-serif", ax=ax)
 
         edge_labels = nx.get_edge_attributes(G, "weight")
-        nx.draw_networkx_edge_labels(G, pos, edge_labels, ax=ax)
+        nx.draw_networkx_edge_labels(G, pos, edge_labels, ax=ax, label_pos=0.3)
 
         ax.set_title(f'Frame {idx}')
 
