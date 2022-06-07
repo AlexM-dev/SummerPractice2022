@@ -76,7 +76,7 @@ def readStp(filename):
 
     for i in range(2, len(graph)):
         if ort:
-            if(graph[i][0].lower() == 'A'):
+            if(graph[i][0].lower() == 'A'.lower()):
                 elist.append([int(graph[i][1]), int(graph[i][2]), int(graph[i][3])])
             else:
                 elist.append([int(graph[i][1]), int(graph[i][2]), int(graph[i][3])])
