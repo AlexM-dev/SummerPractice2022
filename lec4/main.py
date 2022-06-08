@@ -139,7 +139,7 @@ gr = makeAdjList(elist, nodes)
 def update(idx): 
     global neib
     ax.clear()
-    if idx == 15:
+    if idx == 0:
         neib = []
     nx.draw_networkx_nodes(G, pos, ax=ax, node_color="b")
     #for neighbour in gr[]:
