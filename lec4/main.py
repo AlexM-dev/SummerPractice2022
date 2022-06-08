@@ -7,6 +7,7 @@ import collections
 ### Init
 plt.style.use('dark_background')
 path = []
+neib = []
 ###
 
 ### Make lists fincs
@@ -104,9 +105,9 @@ def readStp(filename):
 
 ### simple1.stp is a tree
 ### simple.stp is not a tree
-elist, edges, ort, nodes = readStp('simple1.stp')
+#elist, edges, ort, nodes = readStp('simple1.stp')
 
-'''
+
 ### Big tree
 elist = []
 nodes = 100
@@ -117,9 +118,9 @@ for i in range(1, nodes // 2):
     k+=1
     elist.append([i, k, 1])
     k+=1
-print(elist)
+#print(elist)
 ###
-'''
+
 
 ### choose bfs or dfs
 dfs(makeAdjList(elist, nodes), 1)
@@ -133,10 +134,19 @@ G.add_weighted_edges_from(elist)
 pos = nx.spring_layout(G, seed=30)
 
 fig, ax = plt.subplots(figsize=(len(elist), 4))
+gr = makeAdjList(elist, nodes)
 
-def update(idx):
+def update(idx): 
+    global neib
     ax.clear()
+    if idx == 15:
+        neib = []
     nx.draw_networkx_nodes(G, pos, ax=ax, node_color="b")
+    #for neighbour in gr[]:
+    #    neib.append(neighbour)
+    for i in range(len(gr[path[idx%len(path)] - 1])): 
+        neib.append(gr[path[idx%len(path)] - 1][i])
+    nx.draw_networkx_nodes(G, pos, ax=ax, node_color="g", nodelist=neib)
     nx.draw_networkx_nodes(G, pos, ax=ax, node_color="r", nodelist=path[0:idx%len(path) + 1])
 
 
