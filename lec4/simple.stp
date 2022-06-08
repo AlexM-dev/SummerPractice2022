@@ -1,0 +1,22 @@
+SECTION Graph
+Nodes 11
+Edges 15
+E 1 2 9
+E 2 1 6
+E 1 5 1
+E 4 6 2
+E 4 5 7
+E 2 3 10
+E 3 4 5
+E 4 3 7
+E 5 7 3
+E 6 5 2
+E 8 11 4
+E 8 9 3
+E 10 9 5
+E 10 11 8
+E 8 4 3
+End
+
+EOF
+
