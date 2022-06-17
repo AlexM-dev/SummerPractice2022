@@ -110,7 +110,7 @@ def readStp(filename):
 
 ### Big tree
 elist = []
-nodes = 100
+nodes = 600
 k = 2
 ort = False
 for i in range(1, nodes // 2):

@@ -7,7 +7,7 @@ import math
 
 api = overpass.API()
 
-area = 'Московская область'  # <--area can be changed
+area = 'Санкт-Петербург'  # <--area can be changed
 station_response = api.get(f'area[name="{area}"];node(area)[railway=station];',
                            responseformat='csv(::id,::type,"name",::lat,::lon)')
 station_lats = []
